@@ -1,5 +1,5 @@
 import React from 'react';
-import { Banner, Sidebar } from '../../components';
+import { Banner, Sidebar, BestSeller } from '../../components';
 
 const Home = () => {
     return (
@@ -11,9 +11,10 @@ const Home = () => {
                 </div>
                 <div className="flex flex-col gap-5 pl-5 w-[80%] flex-auto ">
                     <Banner />
-                    <span>Best seller</span>
+                    <BestSeller />
                 </div>
             </div>
+            <div className="h-56"></div>
         </>
     );
 };
