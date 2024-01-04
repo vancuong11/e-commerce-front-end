@@ -8,7 +8,7 @@ const { FaStar, HiMenu } = icons;
 let idInterval;
 
 const DealDaily = () => {
-    const [dealDaily, setDealDaily] = useState('');
+    const [dealDaily, setDealDaily] = useState([]);
     const [hours, setHours] = useState(0);
     const [minute, setMinute] = useState(0);
     const [second, setSecond] = useState(0);
@@ -18,7 +18,14 @@ const DealDaily = () => {
         const response = await getApiProduct({ limit: 1, page: Math.round(Math.random() * 10), totalRatings: 5 });
         if (response.status === 'OK') {
             setDealDaily(response.data[0]);
-            setHours(23);
+            const h = 24 - new Date().getHours();
+            const m = 60 - new Date().getMinutes();
+            const s = 60 - new Date().getSeconds();
+            setHours(h);
+            setMinute(m);
+            setSecond(s);
+        } else {
+            setHours(0);
             setMinute(59);
             setSecond(59);
         }
@@ -75,7 +82,7 @@ const DealDaily = () => {
                     alt=""
                     className="w-full object-contain"
                 />
-                <span className="line-clamp-1 text-center   ">{dealDaily?.name}</span>
+                <span className="line-clamp-1 text-center">{dealDaily?.name}</span>
                 <span className="flex h-4">{renderStarFromNumber(dealDaily?.totalRatings, 20)}</span>
                 <span>{`${formatPrice(dealDaily?.price)} VND`}</span>
             </div>
