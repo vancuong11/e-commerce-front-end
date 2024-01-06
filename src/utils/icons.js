@@ -5,6 +5,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { FaStar, FaRegStar, FaEye, FaHeart } from 'react-icons/fa';
 import { AiFillHome } from 'react-icons/ai';
 import { HiMenu } from 'react-icons/hi';
+import { IoIosArrowForward } from 'react-icons/io';
 const icons = {
     RiPhoneFill,
     MdEmail,
@@ -16,6 +17,7 @@ const icons = {
     FaEye,
     HiMenu,
     FaHeart,
+    IoIosArrowForward,
 };
 
 export default icons;
