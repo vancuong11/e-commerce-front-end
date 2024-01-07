@@ -5,6 +5,8 @@ import trending from '../assets/trending.png';
 import { renderStarFromNumber } from '../utils/helpers';
 import { SelectOptions } from '../components';
 import icons from '../utils/icons';
+import { Link } from 'react-router-dom';
+import path from '../utils/path';
 
 const { FaEye, HiMenu, FaHeart } = icons;
 
@@ -13,7 +15,8 @@ const Product = ({ productData, isNew }) => {
     return (
         <>
             <div className="w-full text-base px-[10px]">
-                <div
+                <Link
+                    to={`/${path.DETAIL_PRODUCT}/${productData?._id}/${productData?.name}`}
                     className="border w-full p-[15px] flex flex-col items-center"
                     onMouseEnter={(e) => {
                         e.stopPropagation();
@@ -52,7 +55,7 @@ const Product = ({ productData, isNew }) => {
                         <span className="line-clamp-1">{productData?.name}</span>
                         <span>{`${formatPrice(productData?.price)} VND`}</span>
                     </div>
-                </div>
+                </Link>
             </div>
         </>
     );
