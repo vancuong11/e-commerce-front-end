@@ -51,7 +51,7 @@ const Product = ({ productData, isNew }) => {
                         />
                     </div>
                     <div className="flex flex-col gap-1 mt-[15px] items-start w-full">
-                        <span className="flex h-4">{renderStarFromNumber(productData?.totalRatings)}</span>
+                        <span className="flex h-4">{renderStarFromNumber(productData?.totalRatings, 20)}</span>
                         <span className="line-clamp-1">{productData?.name}</span>
                         <span>{`${formatPrice(productData?.price)} VND`}</span>
                     </div>

@@ -4,9 +4,10 @@ import { apiLogin, apiRegister, apiForgotPassword } from '../../apis';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import path from '../../utils/path';
-import { register } from '../../store/user/userSlice';
+import { login } from '../../store/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { validate } from '../../utils/helpers';
 
 const Login = () => {
     const [payload, setPayload] = useState({
@@ -30,32 +31,43 @@ const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [email, setEmail] = useState('');
+    const [invalidField, setInvalidField] = useState([]);
+
+    useEffect(() => {
+        restPayload();
+    }, [isRegister]);
+
     const handleSubmit = useCallback(async () => {
         const { firstName, lastName, phone, ...data } = payload;
-        if (isRegister) {
-            const response = await apiRegister(payload);
-            if (response.status === 'OK') {
-                Swal.fire('Congratulations!', response.message, 'success').then(() => {
-                    setIsRegister(false);
-                    restPayload();
-                });
+
+        const invalids = isRegister ? validate(payload, setInvalidField) : validate(data, setInvalidField);
+        if (invalids === 0) {
+            if (isRegister) {
+                const response = await apiRegister(payload);
+                if (response.status === 'OK') {
+                    Swal.fire('Congratulations!', response.message, 'success').then(() => {
+                        setIsRegister(false);
+                        restPayload();
+                    });
+                } else {
+                    Swal.fire('Oops!', response.message, 'error');
+                }
             } else {
-                Swal.fire('Oops!', response.message, 'error');
+                const rs = await apiLogin(data);
+                if (rs.status === 'OK') {
+                    dispatch(
+                        login({
+                            isLoggedIn: true,
+                            token: rs.access_token,
+                            current: rs.data,
+                        }),
+                    );
+                    navigate(`/${path.HOME}`);
+                } else {
+                    Swal.fire('Oops!', rs.message, 'error');
+                }
             }
         } else {
-            const rs = await apiLogin(data);
-            if (rs.status === 'OK') {
-                dispatch(
-                    register({
-                        isLoggedIn: true,
-                        token: rs.access_token,
-                        current: rs.data,
-                    }),
-                );
-                navigate(`/${path.HOME}`);
-            } else {
-                Swal.fire('Oops!', rs.message, 'error');
-            }
         }
     }, [payload, isRegister]);
 
@@ -109,13 +121,46 @@ const Login = () => {
                         </h1>
                         {isRegister && (
                             <div className="flex items-center gap-2">
-                                <InputField value={payload.firstName} setValue={setPayload} nameKey="firstName" />
-                                <InputField value={payload.lastName} setValue={setPayload} nameKey="lastName" />
+                                <InputField
+                                    value={payload.firstName}
+                                    setValue={setPayload}
+                                    nameKey="firstName"
+                                    invalidField={invalidField}
+                                    setInvalidField={setInvalidField}
+                                />
+                                <InputField
+                                    value={payload.lastName}
+                                    setValue={setPayload}
+                                    nameKey="lastName"
+                                    invalidField={invalidField}
+                                    setInvalidField={setInvalidField}
+                                />
                             </div>
                         )}
-                        <InputField value={payload.email} setValue={setPayload} nameKey="email" />
-                        {isRegister && <InputField value={payload.phone} setValue={setPayload} nameKey="phone" />}
-                        <InputField value={payload.password} setValue={setPayload} nameKey="password" type="password" />
+                        <InputField
+                            value={payload.email}
+                            setValue={setPayload}
+                            nameKey="email"
+                            invalidField={invalidField}
+                            setInvalidField={setInvalidField}
+                        />
+                        {isRegister && (
+                            <InputField
+                                value={payload.phone}
+                                setValue={setPayload}
+                                nameKey="phone"
+                                invalidField={invalidField}
+                                setInvalidField={setInvalidField}
+                            />
+                        )}
+                        <InputField
+                            value={payload.password}
+                            setValue={setPayload}
+                            nameKey="password"
+                            type="password"
+                            invalidField={invalidField}
+                            setInvalidField={setInvalidField}
+                        />
                         <Button name={isRegister ? 'Register' : 'Login'} handleOnClick={handleSubmit} fw />
                         <div className="flex items-center justify-between my-2 w-full text-sm">
                             {!isRegister && (

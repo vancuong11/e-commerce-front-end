@@ -29,3 +29,33 @@ export const renderStarFromNumber = (number, size) => {
 
     return star;
 };
+export const validate = (payload, setInvalidField) => {
+    let invalids = 0;
+    const formatPayload = Object.entries(payload);
+    for (let i of formatPayload) {
+        if (i[1].trim() === '') {
+            invalids++;
+            setInvalidField((prev) => [...prev, { name: i[0], message: 'Required this field' }]);
+        }
+    }
+    for (let i of formatPayload) {
+        switch (i[0]) {
+            case 'email':
+                const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                if (!i[1].match(regex)) {
+                    invalids++;
+                    setInvalidField((prev) => [...prev, { name: i[0], message: 'Email invalid' }]);
+                }
+                break;
+            case 'password':
+                if (i[1].length < 6) {
+                    invalids++;
+                    setInvalidField((prev) => [...prev, { name: i[0], message: 'Password minimum 6 characters' }]);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    return invalids;
+};
