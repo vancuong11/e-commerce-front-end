@@ -6,3 +6,4 @@ export { default as DetailsProduct } from './DetailsProduct';
 export { default as Blogs } from './Blogs';
 export { default as Service } from './Service';
 export { default as FAQ } from './FAQ';
+export { default as ResetPassword } from './ResetPassword';

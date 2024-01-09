@@ -12,3 +12,16 @@ export const apiLogin = (data) =>
         method: 'POST',
         data: data,
     });
+export const apiForgotPassword = (data) =>
+    axios({
+        url: '/user/forgot-password',
+        method: 'POST',
+        data: data,
+    });
+
+export const apiResetPassword = (data) =>
+    axios({
+        url: '/user/reset-password',
+        method: 'PUT',
+        data: data,
+    });

@@ -3,6 +3,7 @@ const path = {
     HOME: '',
     ALL: '*',
     LOGIN: 'login',
+    RESET_PASSWORD: 'reset-password/:token',
     PRODUCTS: 'products',
     BLOGS: 'blogs',
     OUR_SERVICES: 'services',
